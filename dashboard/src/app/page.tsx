@@ -1,4 +1,6 @@
 import Link from "next/link";
+import fs from "node:fs/promises";
+import path from "node:path";
 
 type SpendSnapshot = {
   generatedAt: string;
@@ -36,20 +38,30 @@ function num(x: number) {
 }
 
 export default async function Home() {
-  const res = await fetch("/spend-report-latest.json", { cache: "no-store" });
+  let data: SpendSnapshot | null = null;
 
-  if (!res.ok) {
+  try {
+    const jsonPath = path.join(process.cwd(), "public", "spend-report-latest.json");
+    const raw = await fs.readFile(jsonPath, "utf-8");
+    data = JSON.parse(raw) as SpendSnapshot;
+  } catch {
+    // ignore
+  }
+
+  if (!data) {
     return (
       <main style={{ padding: 24, fontFamily: "system-ui" }}>
         <h1>OpenClaw Spend Dashboard</h1>
         <p>
-          No snapshot found yet. Run: <code>scripts/spend_report_to_dashboard.sh</code>
+          No snapshot found yet. Run:{" "}
+          <code>scripts/spend_report_to_dashboard.sh</code>
+        </p>
+        <p>
+          Expected file: <code>dashboard/public/spend-report-latest.json</code>
         </p>
       </main>
     );
   }
-
-  const data = (await res.json()) as SpendSnapshot;
 
   const toolTop = Object.entries(data.toolCalls)
     .sort((a, b) => b[1] - a[1])
