@@ -1,0 +1,46 @@
+# HEARTBEAT.md
+
+# Goal: anti-spam heartbeat.
+# - Run quick health checks.
+# - Only alert Nate when something is wrong or has CHANGED since last time.
+# - Otherwise reply exactly: HEARTBEAT_OK
+
+## State
+
+- Read/write state file: `~/.openclaw/state/heartbeat-state.json`
+- Store:
+  - lastHash (string)
+  - lastAlertAt (ISO string)
+  - lastOkAt (ISO string)
+  - lastSummary (short string)
+
+## Checks (keep them cheap)
+
+1) Run: `openclaw status --deep`
+2) Extract the minimum signal:
+   - Gateway reachable ms (from Overview)
+   - Telegram channel state (OK vs not OK)
+   - Security audit summary line (critical/warn/info counts)
+
+## Dedupe + pacing
+
+- Build a compact summary string like:
+  `gateway=<reachable|unreachable> telegram=<OK|DOWN> audit=<crit>/<warn>/<info>`
+- Hash key can just be the summary string itself (no need for crypto).
+- If telegram is NOT OK, gateway unreachable, or critical>0: ALWAYS alert.
+- Else: only alert if the summary string != lastHash.
+
+## Output
+
+If alerting, send exactly 3 bullets (no extra text):
+- Gateway: <reachable + ms>
+- Telegram: <state + ms>
+- Security: <summary; include warning titles if warn>0, but keep it short>
+
+Update the state file every time:
+- lastHash = current summary string
+- lastSummary = current summary string
+- lastAlertAt = now (if alerted)
+- lastOkAt = now (if HEARTBEAT_OK)
+
+If not alerting: reply exactly `HEARTBEAT_OK`.
