@@ -22,6 +22,9 @@ export default function RootLayout({
             </Link>
             <nav className="tabs">
               <Link className="tab" href="/">
+                Command
+              </Link>
+              <Link className="tab" href="/spend">
                 Spend
               </Link>
               <Link className="tab" href="/sessions">

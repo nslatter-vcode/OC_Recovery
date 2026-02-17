@@ -36,7 +36,10 @@ yarn-error.log*
 # dashboards
 public/coach-journal-latest.json
 public/coach-journal-history.jsonl
+public/coach-signal-latest.json
+public/coach-signal-history.jsonl
 public/spend-report-latest.json
+public/yggdrasil-home.json
 
 # vercel
 .vercel

@@ -1,154 +1,102 @@
-import Link from "next/link";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-type SpendSnapshot = {
+const HOME_JSON = "yggdrasil-home.json";
+
+type Signal = {
   generatedAt: string;
-  window: { hours: number; start: string; end: string };
-  totals: {
-    assistantTurns: number;
-    totalTokens: number;
-    totalCost: number;
-    avgTokensPerTurn: number;
-    maxTokensPerTurn: number;
-  };
-  toolCalls: Record<string, number>;
-  largestTurns: Array<{
-    ts: string;
-    tokens: number;
-    cost: number;
-    tools: string[];
-    session: string;
-  }>;
-  perSession: Array<{
-    session: string;
-    assistantTurns: number;
-    toolTurns: number;
-    tokens: number;
-    cost: number;
-  }>;
+  humor: string;
+  reflection: string;
+  context: string;
 };
 
-function money(x: number) {
-  return `$${x.toFixed(4)}`;
-}
+type HomePayload = {
+  date: string;
+  signal: Signal;
+  today: string[];
+  yesterday: { date: string; movement: string[] };
+  tomorrow: string[];
+  blockers: string[];
+  summary: {
+    totalTokens: number;
+    totalCost: number;
+  };
+};
 
-function num(x: number) {
-  return x.toLocaleString();
-}
+const SectionCard = ({ title, items }: { title: string; items: string[] }) => (
+  <div className="directive-card">
+    <h3>{title}</h3>
+    <ul>
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  </div>
+);
 
-export default async function SpendPage() {
-  let data: SpendSnapshot | null = null;
-
+export default async function HomePage() {
+  let data: HomePayload | null = null;
   try {
-    const jsonPath = path.join(process.cwd(), "public", "spend-report-latest.json");
-    const raw = await fs.readFile(jsonPath, "utf-8");
-    data = JSON.parse(raw) as SpendSnapshot;
+    const raw = await fs.readFile(path.join(process.cwd(), "public", HOME_JSON), "utf-8");
+    data = JSON.parse(raw) as HomePayload;
   } catch {
-    // ignore
+    // fall through
   }
-
-  if (!data) {
-    return (
-      <main>
-        <h1 className="h1">Spend</h1>
-        <p className="subtle">
-          No snapshot found yet. Generate one with:{" "}
-          <code>scripts/spend_report_to_dashboard.sh</code>
-        </p>
-        <p className="subtle">
-          Expected file: <code>dashboard/public/spend-report-latest.json</code>
-        </p>
-      </main>
-    );
-  }
-
-  const toolTop = Object.entries(data.toolCalls)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, 10);
 
   return (
     <main>
-      <h1 className="h1">Spend</h1>
-      <p className="subtle">
-        Snapshot: <b>{data.generatedAt}</b> · Window: last <b>{data.window.hours}h</b>
-      </p>
-
-      <section className="grid section">
-        <div className="card">
-          <div className="card-label">Total cost</div>
-          <div className="card-value">{money(data.totals.totalCost)}</div>
+      <section className="signal-panel">
+        <div>
+          <p className="signal-label">DAILY SIGNAL · {data?.date ?? "--"}</p>
+          {data ? (
+            <>
+              <p className="signal-humor">{data.signal.humor}</p>
+              <p className="signal-reflection">{data.signal.reflection}</p>
+            </>
+          ) : (
+            <p className="signal-humor subtle">Signal awaiting the 3 AM ritual.</p>
+          )}
         </div>
-        <div className="card">
-          <div className="card-label">Total tokens</div>
-          <div className="card-value">{num(data.totals.totalTokens)}</div>
-        </div>
-        <div className="card">
-          <div className="card-label">Assistant turns</div>
-          <div className="card-value">{num(data.totals.assistantTurns)}</div>
-        </div>
-        <div className="card">
-          <div className="card-label">Avg / Max tokens per turn</div>
-          <div style={{ fontSize: 18, fontWeight: 800, marginTop: 6 }}>
-            {num(Math.round(data.totals.avgTokensPerTurn))} / {num(data.totals.maxTokensPerTurn)}
-          </div>
+        <div className="signal-meta">
+          <p>Yggdrasil Core</p>
+          <p className="subtle">Posture setting · No scope creep</p>
         </div>
       </section>
 
-      <section className="section">
-        <h2>Top tool calls</h2>
-        <ul>
-          {toolTop.map(([name, n]) => (
-            <li key={name}>
-              <code>{name}</code>: {n}
-            </li>
-          ))}
-        </ul>
+      <section className="directive-board">
+        <div className="directive-column">
+          <SectionCard title="TODAY (Max 3)" items={data?.today ?? ["Loading tasks..."]} />
+        </div>
+        <div className="directive-column">
+          <SectionCard title="YESTERDAY (Movement Only)" items={data?.yesterday.movement.length ? data.yesterday.movement : ["No movement captured yet."]} />
+        </div>
+        <div className="directive-column">
+          <SectionCard title="TOMORROW (Pre-Commit)" items={data?.tomorrow ?? ["No pre-commits listed."]} />
+        </div>
+        <div className="directive-column">
+          <SectionCard title="BLOCKERS" items={data?.blockers ?? ["No blockers. Execution available."]} />
+        </div>
       </section>
 
-      <section className="section">
-        <h2>Largest turns</h2>
-        <ol>
-          {data.largestTurns.map((t) => (
-            <li key={t.ts + t.session} style={{ marginBottom: 10 }}>
-              <b>{num(t.tokens)}</b> tokens · {money(t.cost)} · tools={t.tools.join(",") || "none"} · session={t.session}
-              <div className="subtle">{t.ts}</div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="section">
-        <h2>Per-session</h2>
-        <table className="table">
-          <thead>
-            <tr>
-              {["Session", "Assistant turns", "Tool turns", "Tokens", "Cost"].map((h) => (
-                <th key={h}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {data.perSession.map((s) => (
-              <tr key={s.session}>
-                <td>
-                  <code>{s.session}</code>
-                </td>
-                <td>{s.assistantTurns}</td>
-                <td>{s.toolTurns}</td>
-                <td>{num(s.tokens)}</td>
-                <td>{money(s.cost)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-
-        <p className="subtle" style={{ marginTop: 12 }}>
-          Data source: <code>/spend-report-latest.json</code> (generated nightly at 3am).
-        </p>
-        <p>
-          <Link href="/spend-report-latest.json">Download latest JSON</Link>
-        </p>
+      <section className="summary">
+        <div>
+          <p className="section-label">SUMMARY</p>
+          {data ? (
+            <p>
+              Tokens today:
+              <strong> {data.summary.totalTokens.toLocaleString()}</strong> · Cost:
+              <strong> ${data.summary.totalCost.toFixed(2)}</strong>
+            </p>
+          ) : (
+            <p className="subtle">Summary pending the nightly report.</p>
+          )}
+        </div>
+        <div className="plan-note">
+          <p>Ritual Command Surface</p>
+          <p className="subtle">
+            Operate like a living Kanban—today’s top work, yesterday’s movement, tomorrow’s pre-commitments, and any blockers.
+          </p>
+        </div>
       </section>
     </main>
   );

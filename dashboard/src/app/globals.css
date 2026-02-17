@@ -118,3 +118,98 @@ code {
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding-bottom: 10px;
 }
+
+.signal-panel {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 20px;
+  background: linear-gradient(180deg, rgba(120, 92, 255, 0.15), rgba(64, 47, 149, 0.35));
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.signal-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.signal-humor {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.signal-reflection {
+  font-size: 1rem;
+  margin-top: 8px;
+  color: rgba(245, 245, 245, 0.85);
+}
+
+.signal-meta {
+  text-align: right;
+  font-size: 0.85rem;
+}
+
+.directive-board {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.directive-column {
+  min-height: 200px;
+}
+
+.directive-card {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 16px;
+  background: linear-gradient(180deg, rgba(11, 11, 13, 0.8), rgba(17, 17, 20, 0.95));
+}
+
+.directive-card h3 {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.directive-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.directive-card li {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.summary {
+  margin-top: 26px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(10, 10, 10, 0.75), rgba(17, 17, 22, 0.95));
+}
+
+.section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+}
+
+.plan-note {
+  text-align: right;
+}
