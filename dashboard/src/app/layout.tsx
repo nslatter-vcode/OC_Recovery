@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "OpenClaw Dashboard",
-  description: "Local OpenClaw spend + ops dashboard",
+  title: "Yggdrasil Core Dashboard",
+  description: "Local Yggdrasil Core spend + ops dashboard",
 };
 
 export default function RootLayout({
@@ -18,7 +18,7 @@ export default function RootLayout({
         <header className="nav">
           <div className="nav-inner">
             <Link className="brand" href="/">
-              OpenClaw
+              Yggdrasil (IG-drah-sill) Core
             </Link>
             <nav className="tabs">
               <Link className="tab" href="/">
