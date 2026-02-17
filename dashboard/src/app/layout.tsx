@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 
 const navGroups = [
   {
-    icon: "$",
     label: "Financial",
     items: [
       { label: "Spend", href: "/spend" },
@@ -17,7 +16,6 @@ const navGroups = [
     ],
   },
   {
-    icon: "📊",
     label: "Productivity",
     items: [
       { label: "Projects", href: "/productivity" },
@@ -25,7 +23,6 @@ const navGroups = [
     ],
   },
   {
-    icon: "⚙️",
     label: "Systems",
     items: [
       { label: "Automation", href: "/automation" },
@@ -56,7 +53,7 @@ export default function RootLayout({
                   key={group.label}
                 >
                   <button className="nav-link" type="button" aria-label={group.label}>
-                    <span aria-hidden="true">{group.icon}</span>
+                    {group.label}
                   </button>
                   <div className="nav-menu">
                     {group.items.map((item) => (
@@ -68,13 +65,13 @@ export default function RootLayout({
                 </div>
               ))}
               <div className="nav-item">
-                <Link className="nav-link" href="/profile" aria-label="Profile">
-                  <span aria-hidden="true">👤</span>
+                <Link className="nav-link" href="/profile">
+                  Profile
                 </Link>
               </div>
               <div className="nav-item">
-                <Link className="nav-link" href="/about" aria-label="About">
-                  <span aria-hidden="true">🛈</span>
+                <Link className="nav-link" href="/about">
+                  About
                 </Link>
               </div>
             </nav>
