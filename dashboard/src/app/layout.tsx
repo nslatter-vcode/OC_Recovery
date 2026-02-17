@@ -44,7 +44,7 @@ export default function RootLayout({
         <header className="nav">
           <div className="nav-inner">
             <Link className="brand" href="/">
-              The Sanctum
+              THE SANCTUM
             </Link>
             <nav className="tabs">
               {navGroups.map((group) => (
