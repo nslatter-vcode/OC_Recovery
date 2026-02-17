@@ -58,7 +58,7 @@ code {
 
 .tabs {
   display: flex;
-  gap: 8px;
+  gap: 16px;
   margin-left: auto;
   align-items: center;
 }
@@ -75,17 +75,15 @@ code {
   background: none;
   border: none;
   color: var(--muted);
-  font-size: 0.85rem;
-  padding: 4px 6px;
-  border-radius: 6px;
-  letter-spacing: 0.08em;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  font-size: 1.2rem;
+  padding: 6px 10px;
+  border-radius: 8px;
+  letter-spacing: 0;
+  line-height: 1;
 }
 
-.nav-link span {
-  display: inline-block;
+.nav-link:hover {
+  color: var(--text);
 }
 
 .nav-link:hover {
@@ -132,12 +130,8 @@ code {
 }
 
 .signal-panel {
-  border-radius: 18px;
-  padding: 24px;
-  background: linear-gradient(180deg, rgba(138, 103, 255, 0.35), rgba(82, 55, 152, 0.45));
   margin-top: 20px;
   text-align: center;
-  border: none;
 }
 
 .signal-label {
@@ -158,8 +152,8 @@ code {
 
 .command-board {
   margin-top: 28px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
 }
 

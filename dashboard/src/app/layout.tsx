@@ -55,9 +55,8 @@ export default function RootLayout({
                   className={`nav-group${group.label === "Systems" ? " systems-group" : ""}`}
                   key={group.label}
                 >
-                  <button className="nav-link" type="button">
+                  <button className="nav-link" type="button" aria-label={group.label}>
                     <span aria-hidden="true">{group.icon}</span>
-                    <span className="nav-label">{group.label}</span>
                   </button>
                   <div className="nav-menu">
                     {group.items.map((item) => (
@@ -69,15 +68,13 @@ export default function RootLayout({
                 </div>
               ))}
               <div className="nav-item">
-                <Link className="nav-link" href="/profile">
+                <Link className="nav-link" href="/profile" aria-label="Profile">
                   <span aria-hidden="true">👤</span>
-                  <span className="nav-label">Profile</span>
                 </Link>
               </div>
               <div className="nav-item">
-                <Link className="nav-link" href="/about">
+                <Link className="nav-link" href="/about" aria-label="About">
                   <span aria-hidden="true">🛈</span>
-                  <span className="nav-label">About</span>
                 </Link>
               </div>
             </nav>
