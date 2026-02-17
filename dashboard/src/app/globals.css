@@ -306,3 +306,59 @@ code {
 .plan-note {
   text-align: right;
 }
+
+.projects {
+  margin-top: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 16px 20px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(10, 10, 10, 0.85));
+}
+
+.projects-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 12px;
+}
+
+.projects-header h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.project-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  padding: 6px 10px;
+  border-radius: 10px;
+}
+
+.project-list li.pending {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.project-list li.done {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(245, 245, 245, 0.6);
+}
+
+.project-checkbox {
+  width: 20px;
+  text-align: center;
+}
+
+.project-text {
+  flex: 1;
+}

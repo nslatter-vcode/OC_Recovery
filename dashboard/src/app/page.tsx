@@ -14,6 +14,11 @@ type TaskCard = {
   detail: string;
 };
 
+type TodoItem = {
+  text: string;
+  done: boolean;
+};
+
 type HomePayload = {
   date: string;
   signal: Signal;
@@ -35,6 +40,7 @@ type JournalEntry = {
 
 const HOME_JSON = "yggdrasil-home.json";
 const JOURNAL_HISTORY = "coach-journal-history.jsonl";
+const TODO_FILE = "TODO.md";
 
 const SectionCard = ({ title, items }: { title: string; items: TaskCard[] }) => {
   const display = items && items.length ? items : [{ id: `${title}-empty`, title: "—", detail: "Nothing to report." }];
@@ -76,9 +82,26 @@ async function readJournalHistory(): Promise<JournalEntry[]> {
   }
 }
 
+async function readTodoList(): Promise<TodoItem[]> {
+  try {
+    const raw = await fs.readFile(path.join(process.cwd(), "..", TODO_FILE), "utf-8");
+    return raw
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith("- ["))
+      .map((line) => ({
+        text: line.slice(line.indexOf("]") + 1).trim(),
+        done: line.startsWith("- [x]") || line.startsWith("- [X]"),
+      }));
+  } catch {
+    return [];
+  }
+}
+
 export default async function HomePage() {
   const data = await readHomePayload();
   const history = await readJournalHistory();
+  const todos = await readTodoList();
 
   return (
     <main>
@@ -124,6 +147,25 @@ export default async function HomePage() {
             Operate like a living Kanban—today’s top work, yesterday’s movement, tomorrow’s pre-commitments, and any blockers.
           </p>
         </div>
+      </section>
+
+      <section className="projects">
+        <div className="projects-header">
+          <h2>Project board</h2>
+          <p>Checked items are closed; open items stay actionable.</p>
+        </div>
+        <ul className="project-list">
+          {todos.length ? (
+            todos.map((todo) => (
+              <li key={todo.text} className={todo.done ? "done" : "pending"}>
+                <span className="project-checkbox">{todo.done ? "✔" : "☐"}</span>
+                <span className="project-text">{todo.text}</span>
+              </li>
+            ))
+          ) : (
+            <li className="subtle">Todo list empty. All systems clear.</li>
+          )}
+        </ul>
       </section>
     </main>
   );
