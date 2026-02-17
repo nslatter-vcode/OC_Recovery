@@ -8,3 +8,4 @@ COO log: decisions + changes + why. Keep entries short, timestamped.
 - Added standing rule: no secrets in git.
 - Set engagement default: chatty anywhere; includes philosophical/spiritual curiosity.
 - Communication preference: don’t over-soften or constantly praise; be kind but direct.
+- Scheduled briefs: daily brief (7am CST) and weekly CEO review (Mon 7am CST) to Telegram+Discord.
