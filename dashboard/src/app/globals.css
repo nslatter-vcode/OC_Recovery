@@ -155,9 +155,15 @@ code {
 
 .command-board {
   margin-top: 28px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: flex;
   gap: 14px;
+  flex-wrap: nowrap;
+}
+
+@media (max-width: 900px) {
+  .command-board {
+    flex-wrap: wrap;
+  }
 }
 
 .directive-card {
