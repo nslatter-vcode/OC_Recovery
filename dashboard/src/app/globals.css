@@ -245,18 +245,30 @@ code {
   text-transform: uppercase;
 }
 
-.directive-card ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.directive-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
 }
 
-.directive-card li {
+.directive-detail {
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.directive-detail summary {
+  cursor: pointer;
   font-size: 0.95rem;
-  line-height: 1.4;
+  font-weight: 600;
+}
+
+.directive-detail p {
+  margin: 6px 0 0;
+  font-size: 0.9rem;
+  color: rgba(245, 245, 245, 0.92);
+  white-space: pre-wrap;
 }
 
 .summary {

@@ -417,13 +417,24 @@ def main() -> int:
     today_tasks = todo_tasks[:3] if todo_tasks else ["No high-leverage tasks defined."]
     tomorrow_tasks = generate_tomorrow_tasks(todo_tasks)
     blockers = collect_blockers(log_lines)
+
+    def to_cards(items: List[str], prefix: str) -> List[dict]:
+        return [
+            {
+                "id": f"{prefix}-{i}",
+                "title": item if len(item) <= 70 else item[:67] + "...",
+                "detail": item,
+            }
+            for i, item in enumerate(items, 1)
+        ]
+
     home_payload = build_home_payload(
         now.date().isoformat(),
         signal_entry,
         total_tokens,
         total_cost,
-        today_tasks,
-        tomorrow_tasks,
+        to_cards(today_tasks, "today"),
+        to_cards(tomorrow_tasks, "tomorrow"),
         find_previous_movement(history_entries),
         blockers,
     )

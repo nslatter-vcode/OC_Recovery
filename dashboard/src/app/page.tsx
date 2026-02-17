@@ -8,13 +8,19 @@ type Signal = {
   context: string;
 };
 
+type TaskCard = {
+  id: string;
+  title: string;
+  detail: string;
+};
+
 type HomePayload = {
   date: string;
   signal: Signal;
-  today: string[];
-  yesterday: { date: string; movement: string[] };
-  tomorrow: string[];
-  blockers: string[];
+  today: TaskCard[];
+  yesterday: { date: string; movement: TaskCard[] };
+  tomorrow: TaskCard[];
+  blockers: TaskCard[];
   summary: {
     totalTokens: number;
     totalCost: number;
@@ -30,16 +36,22 @@ type JournalEntry = {
 const HOME_JSON = "yggdrasil-home.json";
 const JOURNAL_HISTORY = "coach-journal-history.jsonl";
 
-const SectionCard = ({ title, items }: { title: string; items: string[] }) => (
-  <div className="directive-card">
-    <h3>{title}</h3>
-    <ul>
-      {items.map((item) => (
-        <li key={item}>{item}</li>
-      ))}
-    </ul>
-  </div>
-);
+const SectionCard = ({ title, items }: { title: string; items: TaskCard[] }) => {
+  const display = items && items.length ? items : [{ id: `${title}-empty`, title: "—", detail: "Nothing to report." }];
+  return (
+    <div className="directive-card">
+      <h3>{title}</h3>
+      <div className="directive-list">
+        {display.map((card) => (
+          <details key={card.id} className="directive-detail">
+            <summary>{card.title}</summary>
+            <p>{card.detail}</p>
+          </details>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 async function readHomePayload(): Promise<HomePayload | null> {
   try {
@@ -86,13 +98,10 @@ export default async function HomePage() {
 
       <section className="command-board">
         <div className="command-columns">
-          <SectionCard title="TODAY (Max 3)" items={data?.today ?? ["Loading tasks..."]} />
-          <SectionCard
-            title="YESTERDAY (Movement Only)"
-            items={data?.yesterday.movement.length ? data.yesterday.movement : ["No movement captured yet."]}
-          />
-          <SectionCard title="TOMORROW (Pre-Commit)" items={data?.tomorrow ?? ["No pre-commits listed."]} />
-          <SectionCard title="BLOCKERS" items={data?.blockers ?? ["No blockers. Execution available."]} />
+          <SectionCard title="TODAY (Max 3)" items={data?.today ?? []} />
+          <SectionCard title="YESTERDAY (Movement Only)" items={data?.yesterday?.movement ?? []} />
+          <SectionCard title="TOMORROW (Pre-Commit)" items={data?.tomorrow ?? []} />
+          <SectionCard title="BLOCKERS" items={data?.blockers ?? []} />
         </div>
       </section>
 
