@@ -119,8 +119,8 @@ export default async function HomePage() {
       <section className="command-board">
         <div className="command-columns">
           <SectionCard title="TODAY (Max 3)" items={data?.today ?? []} />
-          <SectionCard title="YESTERDAY (Movement Only)" items={data?.yesterday?.movement ?? []} />
-          <SectionCard title="TOMORROW (Pre-Commit)" items={data?.tomorrow ?? []} />
+          <SectionCard title="YESTERDAY" items={data?.yesterday?.movement ?? []} />
+          <SectionCard title="TOMORROW" items={data?.tomorrow ?? []} />
         </div>
       </section>
 
