@@ -36,6 +36,9 @@ export default function RootLayout({
               <Link className="tab" href="/models">
                 Models
               </Link>
+              <Link className="tab" href="/journal">
+                Journal
+              </Link>
               <Link className="tab" href="/profile">
                 Profile
               </Link>
