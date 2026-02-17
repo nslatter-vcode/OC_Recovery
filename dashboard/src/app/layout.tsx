@@ -3,8 +3,8 @@ import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Yggdrasil Core Dashboard",
-  description: "Local Yggdrasil Core spend + ops dashboard",
+  title: "The Sanctum Dashboard",
+  description: "Local Sanctum spend + ops dashboard",
 };
 
 const navGroups = [
@@ -44,7 +44,7 @@ export default function RootLayout({
         <header className="nav">
           <div className="nav-inner">
             <Link className="brand" href="/">
-              Yggdrasil (IG-drah-sill) Core
+              The Sanctum
             </Link>
             <nav className="tabs">
               {navGroups.map((group) => (
