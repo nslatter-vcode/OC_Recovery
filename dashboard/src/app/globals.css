@@ -132,6 +132,7 @@ code {
 .signal-panel {
   margin-top: 20px;
   text-align: center;
+  padding: 100px 50px;
 }
 
 .signal-label {
