@@ -121,7 +121,6 @@ export default async function HomePage() {
           <SectionCard title="TODAY (Max 3)" items={data?.today ?? []} />
           <SectionCard title="YESTERDAY (Movement Only)" items={data?.yesterday?.movement ?? []} />
           <SectionCard title="TOMORROW (Pre-Commit)" items={data?.tomorrow ?? []} />
-          <SectionCard title="BLOCKERS" items={data?.blockers ?? []} />
         </div>
       </section>
 
