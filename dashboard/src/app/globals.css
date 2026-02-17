@@ -156,12 +156,30 @@ code {
 .command-board {
   margin-top: 28px;
   display: flex;
-  gap: 14px;
+  justify-content: center;
+}
+
+.command-columns {
+  display: flex;
+  gap: 16px;
   flex-wrap: nowrap;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.command-columns::after {
+  content: "";
+  flex: 0 0 16px;
+}
+
+.command-board .directive-card {
+  min-width: 230px;
+  flex: 1;
 }
 
 @media (max-width: 900px) {
-  .command-board {
+  .command-columns {
     flex-wrap: wrap;
   }
 }
