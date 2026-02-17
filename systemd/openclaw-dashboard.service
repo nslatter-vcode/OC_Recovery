@@ -1,0 +1,15 @@
+[Unit]
+Description=OpenClaw Local Dashboard (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/maya/.openclaw/workspace/dashboard
+ExecStart=/home/maya/.openclaw/workspace/scripts/dashboard_prod_start.sh
+Restart=on-failure
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

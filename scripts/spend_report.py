@@ -45,6 +45,7 @@ def main() -> int:
     ap.add_argument("--hours", type=float, default=24.0)
     ap.add_argument("--now", default=None, help="ISO timestamp override (for testing)")
     ap.add_argument("--json-out", default=None, help="Write a JSON summary snapshot to this path")
+    ap.add_argument("--history-out", default=None, help="Append a JSON snapshot line to this JSONL path")
     args = ap.parse_args()
 
     now = parse_ts(args.now) if args.now else dt.datetime.now(dt.timezone.utc)
@@ -153,46 +154,52 @@ def main() -> int:
     for sid, a_cnt, tool_cnt, tok, cost in per_session:
         print(f"- {sid}: turns={a_cnt}, tool-turns={tool_cnt}, tokens={tok:,}, cost={money(cost)}")
 
+    snapshot = {
+        "generatedAt": now.isoformat(timespec="seconds"),
+        "window": {
+            "hours": args.hours,
+            "start": window_start.isoformat(timespec="seconds"),
+            "end": now.isoformat(timespec="seconds"),
+        },
+        "totals": {
+            "assistantTurns": count,
+            "totalTokens": total_tokens,
+            "totalCost": total_cost,
+            "avgTokensPerTurn": avg_tokens,
+            "maxTokensPerTurn": max_tokens,
+        },
+        "toolCalls": dict(tool_counts.most_common()),
+        "largestTurns": [
+            {
+                "ts": ts.isoformat(timespec="seconds"),
+                "tokens": tokens,
+                "cost": cost,
+                "tools": list(tools),
+                "session": sid,
+            }
+            for ts, tokens, cost, tools, sid in top_turns
+        ],
+        "perSession": [
+            {
+                "session": sid,
+                "assistantTurns": a_cnt,
+                "toolTurns": tool_cnt,
+                "tokens": tok,
+                "cost": cost,
+            }
+            for sid, a_cnt, tool_cnt, tok, cost in per_session
+        ],
+    }
+
     if args.json_out:
         os.makedirs(os.path.dirname(os.path.abspath(args.json_out)), exist_ok=True)
-        snapshot = {
-            "generatedAt": now.isoformat(timespec="seconds"),
-            "window": {
-                "hours": args.hours,
-                "start": window_start.isoformat(timespec="seconds"),
-                "end": now.isoformat(timespec="seconds"),
-            },
-            "totals": {
-                "assistantTurns": count,
-                "totalTokens": total_tokens,
-                "totalCost": total_cost,
-                "avgTokensPerTurn": avg_tokens,
-                "maxTokensPerTurn": max_tokens,
-            },
-            "toolCalls": dict(tool_counts.most_common()),
-            "largestTurns": [
-                {
-                    "ts": ts.isoformat(timespec="seconds"),
-                    "tokens": tokens,
-                    "cost": cost,
-                    "tools": list(tools),
-                    "session": sid,
-                }
-                for ts, tokens, cost, tools, sid in top_turns
-            ],
-            "perSession": [
-                {
-                    "session": sid,
-                    "assistantTurns": a_cnt,
-                    "toolTurns": tool_cnt,
-                    "tokens": tok,
-                    "cost": cost,
-                }
-                for sid, a_cnt, tool_cnt, tok, cost in per_session
-            ],
-        }
         with open(args.json_out, "w", encoding="utf-8") as jf:
             json.dump(snapshot, jf, indent=2)
+
+    if args.history_out:
+        os.makedirs(os.path.dirname(os.path.abspath(args.history_out)), exist_ok=True)
+        with open(args.history_out, "a", encoding="utf-8") as hf:
+            hf.write(json.dumps(snapshot) + "\n")
 
     return 0
 
