@@ -1,8 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const HOME_JSON = "yggdrasil-home.json";
-
 type Signal = {
   generatedAt: string;
   humor: string;
@@ -23,6 +21,15 @@ type HomePayload = {
   };
 };
 
+type JournalEntry = {
+  generatedAt: string;
+  logDate: string;
+  keyAccomplishments: string[];
+};
+
+const HOME_JSON = "yggdrasil-home.json";
+const JOURNAL_HISTORY = "coach-journal-history.jsonl";
+
 const SectionCard = ({ title, items }: { title: string; items: string[] }) => (
   <div className="directive-card">
     <h3>{title}</h3>
@@ -34,14 +41,32 @@ const SectionCard = ({ title, items }: { title: string; items: string[] }) => (
   </div>
 );
 
-export default async function HomePage() {
-  let data: HomePayload | null = null;
+async function readHomePayload(): Promise<HomePayload | null> {
   try {
     const raw = await fs.readFile(path.join(process.cwd(), "public", HOME_JSON), "utf-8");
-    data = JSON.parse(raw) as HomePayload;
+    return JSON.parse(raw) as HomePayload;
   } catch {
-    // fall through
+    return null;
   }
+}
+
+async function readJournalHistory(): Promise<JournalEntry[]> {
+  try {
+    const raw = await fs.readFile(path.join(process.cwd(), "public", JOURNAL_HISTORY), "utf-8");
+    return raw
+      .split("\n")
+      .filter(Boolean)
+      .map((line) => JSON.parse(line) as JournalEntry)
+      .slice(-6)
+      .reverse();
+  } catch {
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const data = await readHomePayload();
+  const history = await readJournalHistory();
 
   return (
     <main>
@@ -63,18 +88,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="directive-board">
-        <div className="directive-column">
+      <section className="command-board">
+        <div className="command-columns">
           <SectionCard title="TODAY (Max 3)" items={data?.today ?? ["Loading tasks..."]} />
-        </div>
-        <div className="directive-column">
-          <SectionCard title="YESTERDAY (Movement Only)" items={data?.yesterday.movement.length ? data.yesterday.movement : ["No movement captured yet."]} />
-        </div>
-        <div className="directive-column">
+          <SectionCard
+            title="YESTERDAY (Movement Only)"
+            items={data?.yesterday.movement.length ? data.yesterday.movement : ["No movement captured yet."]}
+          />
           <SectionCard title="TOMORROW (Pre-Commit)" items={data?.tomorrow ?? ["No pre-commits listed."]} />
-        </div>
-        <div className="directive-column">
           <SectionCard title="BLOCKERS" items={data?.blockers ?? ["No blockers. Execution available."]} />
+        </div>
+        <div className="activity-column">
+          <h3>Activity</h3>
+          <div className="activity-feed">
+            {history.length
+              ? history.map((entry) => (
+                  <div className="activity-card" key={entry.generatedAt}>
+                    <p className="activity-date">{entry.logDate || new Date(entry.generatedAt).toDateString()}</p>
+                    <ul>
+                      {entry.keyAccomplishments.slice(0, 3).map((bullet) => (
+                        <li key={bullet}>{bullet}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))
+              : <p className="subtle">Awaiting journal history from Maya.</p>}
+          </div>
         </div>
       </section>
 
