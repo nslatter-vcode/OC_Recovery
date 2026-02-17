@@ -198,10 +198,6 @@ code {
   border-radius: 18px;
   padding: 20px;
   background: linear-gradient(180deg, rgba(120, 92, 255, 0.15), rgba(64, 47, 149, 0.35));
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 24px;
 }
 
 .signal-label {
@@ -227,15 +223,11 @@ code {
   font-size: 0.85rem;
 }
 
-.directive-board {
+.command-board {
   margin-top: 28px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 16px;
-}
-
-.directive-column {
-  min-height: 200px;
 }
 
 .directive-card {

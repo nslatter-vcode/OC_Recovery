@@ -82,10 +82,6 @@ export default async function HomePage() {
             <p className="signal-humor subtle">Signal awaiting the 3 AM ritual.</p>
           )}
         </div>
-        <div className="signal-meta">
-          <p>Yggdrasil Core</p>
-          <p className="subtle">Posture setting · No scope creep</p>
-        </div>
       </section>
 
       <section className="command-board">
@@ -97,23 +93,6 @@ export default async function HomePage() {
           />
           <SectionCard title="TOMORROW (Pre-Commit)" items={data?.tomorrow ?? ["No pre-commits listed."]} />
           <SectionCard title="BLOCKERS" items={data?.blockers ?? ["No blockers. Execution available."]} />
-        </div>
-        <div className="activity-column">
-          <h3>Activity</h3>
-          <div className="activity-feed">
-            {history.length
-              ? history.map((entry) => (
-                  <div className="activity-card" key={entry.generatedAt}>
-                    <p className="activity-date">{entry.logDate || new Date(entry.generatedAt).toDateString()}</p>
-                    <ul>
-                      {entry.keyAccomplishments.slice(0, 3).map((bullet) => (
-                        <li key={bullet}>{bullet}</li>
-                      ))}
-                    </ul>
-                  </div>
-                ))
-              : <p className="subtle">Awaiting journal history from Maya.</p>}
-          </div>
         </div>
       </section>
 
