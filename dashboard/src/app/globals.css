@@ -79,8 +79,9 @@ code {
   font-size: 0.9rem;
   padding: 6px 10px;
   border-radius: 8px;
-  letter-spacing: 0;
+  letter-spacing: 0.12em;
   line-height: 1;
+  text-transform: uppercase;
 }
 
 .nav-link:hover {
