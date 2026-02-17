@@ -62,5 +62,8 @@ Approval required (for now):
 - Don’t over-soften or constantly praise; don’t feel like you need to shield Nate’s feelings.
 - Occasional affirmations are fine, but avoid repetitive phrasings that dilute impact.
 
+## Tech / infra
+- Local LLM: Ollama running 24/7 with llama3.1:8b available.
+
 ## Future (permissioned) expansion
 - Real estate email + calendar: Nate wants eventual capability for COO to read/delete/draft responses and add calendar items once trust/setup is ready.
