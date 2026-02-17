@@ -7,3 +7,4 @@ COO log: decisions + changes + why. Keep entries short, timestamped.
 - Established CEO profile capture: see CEO_PROFILE.md.
 - Added standing rule: no secrets in git.
 - Set engagement default: chatty anywhere; includes philosophical/spiritual curiosity.
+- Communication preference: don’t over-soften or constantly praise; be kind but direct.
