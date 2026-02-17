@@ -212,14 +212,26 @@ def collect_blockers(log_lines: List[str]) -> List[str]:
 
 
 def cardified(items: List[str], prefix: str) -> List[dict]:
-    return [
-        {
-            "id": f"{prefix}-{i}",
-            "title": item if len(item) <= 70 else item[:67] + "...",
-            "detail": item,
-        }
-        for i, item in enumerate(items, 1)
-    ]
+    cards: List[dict] = []
+    for i, item in enumerate(items, 1):
+        title, detail = item, ""
+        if ":" in item:
+            parts = item.split(":", 1)
+            title = parts[0].strip()
+            detail = parts[1].strip()
+        words = title.split()
+        short_title = " ".join(words[:3])
+        if len(words) > 3:
+            short_title = short_title or title
+            short_title += "..."
+        cards.append(
+            {
+                "id": f"{prefix}-{i}",
+                "title": short_title or title or "Untitled",
+                "detail": detail or item,
+            }
+        )
+    return cards
 
 
 def build_home_payload(
