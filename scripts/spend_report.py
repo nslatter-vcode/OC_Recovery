@@ -211,15 +211,26 @@ def collect_blockers(log_lines: List[str]) -> List[str]:
     return blockers
 
 
+def cardified(items: List[str], prefix: str) -> List[dict]:
+    return [
+        {
+            "id": f"{prefix}-{i}",
+            "title": item if len(item) <= 70 else item[:67] + "...",
+            "detail": item,
+        }
+        for i, item in enumerate(items, 1)
+    ]
+
+
 def build_home_payload(
     date_str: str,
     signal_entry: dict,
     total_tokens: int,
     total_cost: float,
-    today_tasks: List[str],
-    tomorrow_tasks: List[str],
+    today_tasks: List[dict],
+    tomorrow_tasks: List[dict],
     previous_movement: dict,
-    blockers: List[str],
+    blockers: List[dict],
 ) -> dict:
     return {
         "date": date_str,
@@ -418,25 +429,19 @@ def main() -> int:
     tomorrow_tasks = generate_tomorrow_tasks(todo_tasks)
     blockers = collect_blockers(log_lines)
 
-    def to_cards(items: List[str], prefix: str) -> List[dict]:
-        return [
-            {
-                "id": f"{prefix}-{i}",
-                "title": item if len(item) <= 70 else item[:67] + "...",
-                "detail": item,
-            }
-            for i, item in enumerate(items, 1)
-        ]
-
+    previous_movement = find_previous_movement(history_entries)
     home_payload = build_home_payload(
         now.date().isoformat(),
         signal_entry,
         total_tokens,
         total_cost,
-        to_cards(today_tasks, "today"),
-        to_cards(tomorrow_tasks, "tomorrow"),
-        find_previous_movement(history_entries),
-        blockers,
+        cardified(today_tasks, "today"),
+        cardified(tomorrow_tasks, "tomorrow"),
+        {
+            "date": previous_movement["date"],
+            "movement": cardified(previous_movement["movement"], "movement"),
+        },
+        cardified(blockers, "blocker"),
     )
 
     print("# OpenClaw Spend Report")
