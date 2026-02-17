@@ -7,6 +7,32 @@ export const metadata: Metadata = {
   description: "Local Yggdrasil Core spend + ops dashboard",
 };
 
+const navGroups = [
+  {
+    label: "Financial",
+    items: [
+      { label: "Spend", href: "/spend" },
+      { label: "Budgets", href: "/budgets" },
+    ],
+  },
+  {
+    label: "Systems",
+    items: [
+      { label: "Automation", href: "/automation" },
+      { label: "Models", href: "/models" },
+      { label: "Sessions", href: "/sessions" },
+      { label: "Agents", href: "/systems" },
+    ],
+  },
+  {
+    label: "Productivity",
+    items: [
+      { label: "Projects", href: "/productivity" },
+      { label: "Journal", href: "/journal" },
+    ],
+  },
+];
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -21,33 +47,30 @@ export default function RootLayout({
               Yggdrasil (IG-drah-sill) Core
             </Link>
             <nav className="tabs">
-              <Link className="tab" href="/">
-                Command
-              </Link>
-              <Link className="tab" href="/spend">
-                Spend
-              </Link>
-              <Link className="tab" href="/sessions">
-                Sessions
-              </Link>
-              <Link className="tab" href="/automation">
-                Automation
-              </Link>
-              <Link className="tab" href="/budgets">
-                Budgets
-              </Link>
-              <Link className="tab" href="/models">
-                Models
-              </Link>
-              <Link className="tab" href="/journal">
-                Journal
-              </Link>
-              <Link className="tab" href="/profile">
-                Profile
-              </Link>
-              <Link className="tab" href="/about">
-                About
-              </Link>
+              {navGroups.map((group) => (
+                <div className="nav-group" key={group.label}>
+                  <button className="nav-link" type="button">
+                    {group.label}
+                  </button>
+                  <div className="nav-menu">
+                    {group.items.map((item) => (
+                      <Link key={item.label} href={item.href} className="nav-menu-link">
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <div className="nav-item">
+                <Link className="nav-link" href="/profile">
+                  Profile
+                </Link>
+              </div>
+              <div className="nav-item">
+                <Link className="nav-link" href="/about">
+                  About
+                </Link>
+              </div>
             </nav>
           </div>
         </header>
