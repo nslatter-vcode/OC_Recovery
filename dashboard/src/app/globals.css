@@ -58,7 +58,7 @@ code {
 
 .tabs {
   display: flex;
-  gap: 12px;
+  gap: 8px;
   margin-left: auto;
   align-items: center;
 }
@@ -67,15 +67,25 @@ code {
   position: relative;
 }
 
+.nav-group.systems-group {
+  margin-left: auto;
+}
+
 .nav-link {
   background: none;
   border: none;
   color: var(--muted);
-  font-size: 0.9rem;
-  padding: 4px 8px;
-  border-radius: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 0.85rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.nav-link span {
+  display: inline-block;
 }
 
 .nav-link:hover {
@@ -84,14 +94,14 @@ code {
 
 .nav-menu {
   position: absolute;
-  top: 32px;
+  top: 30px;
   left: 0;
-  min-width: 150px;
-  background: rgba(20, 20, 35, 0.95);
+  min-width: 140px;
+  background: rgba(19, 19, 32, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 10px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75);
-  padding: 6px 0;
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.7);
+  padding: 4px 0;
   display: none;
 }
 
@@ -107,22 +117,31 @@ code {
 }
 
 .nav-menu-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nav-menu-link {
+  display: block;
+  padding: 6px 14px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.nav-menu-link:hover {
   background: rgba(255, 255, 255, 0.08);
 }
 
 .signal-panel {
-  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 18px;
-  padding: 20px;
-  background: linear-gradient(180deg, rgba(123, 90, 255, 0.25), rgba(73, 45, 131, 0.45));
+  padding: 24px;
+  background: linear-gradient(180deg, rgba(138, 103, 255, 0.35), rgba(82, 55, 152, 0.45));
   margin-top: 20px;
+  text-align: center;
+  border: none;
 }
 
 .signal-label {
-  font-size: 0.75rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  margin: 0;
+  display: none;
 }
 
 .signal-humor {
@@ -139,9 +158,9 @@ code {
 
 .command-board {
   margin-top: 28px;
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .directive-card {

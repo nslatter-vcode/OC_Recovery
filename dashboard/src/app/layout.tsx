@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 
 const navGroups = [
   {
+    icon: "$",
     label: "Financial",
     items: [
       { label: "Spend", href: "/spend" },
@@ -16,19 +17,21 @@ const navGroups = [
     ],
   },
   {
+    icon: "📊",
+    label: "Productivity",
+    items: [
+      { label: "Projects", href: "/productivity" },
+      { label: "Journal", href: "/journal" },
+    ],
+  },
+  {
+    icon: "⚙️",
     label: "Systems",
     items: [
       { label: "Automation", href: "/automation" },
       { label: "Models", href: "/models" },
       { label: "Sessions", href: "/sessions" },
       { label: "Agents", href: "/systems" },
-    ],
-  },
-  {
-    label: "Productivity",
-    items: [
-      { label: "Projects", href: "/productivity" },
-      { label: "Journal", href: "/journal" },
     ],
   },
 ];
@@ -48,9 +51,13 @@ export default function RootLayout({
             </Link>
             <nav className="tabs">
               {navGroups.map((group) => (
-                <div className="nav-group" key={group.label}>
+                <div
+                  className={`nav-group${group.label === "Systems" ? " systems-group" : ""}`}
+                  key={group.label}
+                >
                   <button className="nav-link" type="button">
-                    {group.label}
+                    <span aria-hidden="true">{group.icon}</span>
+                    <span className="nav-label">{group.label}</span>
                   </button>
                   <div className="nav-menu">
                     {group.items.map((item) => (
@@ -63,12 +70,14 @@ export default function RootLayout({
               ))}
               <div className="nav-item">
                 <Link className="nav-link" href="/profile">
-                  Profile
+                  <span aria-hidden="true">👤</span>
+                  <span className="nav-label">Profile</span>
                 </Link>
               </div>
               <div className="nav-item">
                 <Link className="nav-link" href="/about">
-                  About
+                  <span aria-hidden="true">🛈</span>
+                  <span className="nav-label">About</span>
                 </Link>
               </div>
             </nav>

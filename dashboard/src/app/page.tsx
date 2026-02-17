@@ -106,17 +106,14 @@ export default async function HomePage() {
   return (
     <main>
       <section className="signal-panel">
-        <div>
-          <p className="signal-label">DAILY SIGNAL · {data?.date ?? "--"}</p>
-          {data ? (
-            <>
-              <p className="signal-humor">{data.signal.humor}</p>
-              <p className="signal-reflection">{data.signal.reflection}</p>
-            </>
-          ) : (
-            <p className="signal-humor subtle">Signal awaiting the 3 AM ritual.</p>
-          )}
-        </div>
+        {data ? (
+          <>
+            <p className="signal-humor">{data.signal.humor}</p>
+            <p className="signal-reflection">{data.signal.reflection}</p>
+          </>
+        ) : (
+          <p className="signal-humor subtle">Signal awaiting the 3 AM ritual.</p>
+        )}
       </section>
 
       <section className="command-board">
