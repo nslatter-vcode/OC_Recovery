@@ -57,6 +57,15 @@ code {
   font-size: 1.25rem;
 }
 
+.dashboard-shell {
+  width: min(1100px, 100%);
+  margin: 0 auto;
+  padding: 0 18px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
 .tabs {
   display: flex;
   gap: 16px;
@@ -176,8 +185,7 @@ code {
   margin: 28px auto 0;
   display: flex;
   justify-content: center;
-  width: min(1100px, 100%);
-  padding: 0 18px;
+  width: 100%;
 }
 
 .task-link-wrap {
@@ -280,7 +288,6 @@ code {
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: var(--panel2);
-  width: min(1100px, 100%);
 }
 
 .day-summary-card {
