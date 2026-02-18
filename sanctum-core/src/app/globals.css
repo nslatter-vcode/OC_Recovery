@@ -330,22 +330,10 @@ code {
   align-items: baseline;
 }
 
-.line-chart-rows {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.line-chart-wrapper {
   margin-top: 10px;
-}
-
-.line-row {
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.02);
-}
-
-.line-row.current {
-  border-color: rgba(189, 165, 255, 0.6);
+  width: 100%;
+  height: 220px;
 }
 
 .row-label {

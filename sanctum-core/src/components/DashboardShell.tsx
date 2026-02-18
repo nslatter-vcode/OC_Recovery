@@ -1,9 +1,10 @@
 'use client';
 
 import Link from "next/link";
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useMemo, useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import { CHICAGO_ZONE } from "@/lib/time";
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend } from "recharts";
 
 type Signal = {
   openingLine: string;
@@ -64,6 +65,8 @@ type DashboardShellProps = {};
 
 const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 const dueFormatter = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" });
+const WEEKDAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const lineColors = ["#7dd3fc", "#4ade80", "#fcd34d", "#c084fc"];
 
 const hourLabel = (hour: number) => `${hour.toString().padStart(2, "0")}:00`;
 
@@ -177,18 +180,41 @@ export default function DashboardShell({}: DashboardShellProps) {
     items.map((task) => {
       const extras = [task.domain, task.priority];
       if (task.tags) extras.push(task.tags);
-      if (task.dueAt) extras.push(`due ${new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric" }).format(new Date(task.dueAt))}`);
+      if (task.dueAt) extras.push(`due ${dueFormatter.format(new Date(task.dueAt))}`);
       if (task.blocked) extras.push("blocked");
       return { id: task.id, title: task.title, detail: extras.join(" · ") };
     });
 
   const completedHours = usage?.lastCompletedHour ?? -1;
-  const weeklyTrend = usage?.weeklyTrend ?? [];
-  const latestTrendCost = weeklyTrend.at(-1)?.days.at(-1)?.totalCost ?? 0;
+  const rawWeeklyTrend = usage?.weeklyTrend ?? [];
   const tokensToday = usage?.todayTokens ?? 0;
   const costToday = usage?.todayCost ?? 0;
   const dayLabel = DateTime.now().setZone(CHICAGO_ZONE).toFormat("EEE, MMM d, yyyy");
   const dayRangeText = completedHours >= 0 ? `00:00 – ${hourLabel(completedHours)}` : "No completed hours yet";
+  const weeklyTrendLines = useMemo(() => {
+    if (rawWeeklyTrend.length) return rawWeeklyTrend;
+    return Array.from({ length: 4 }, (_, index) => ({
+      label: `Week ${index + 1}`,
+      isCurrentWeek: index === 3,
+      days: WEEKDAYS.map((day) => ({
+        day,
+        totalCost: null,
+        totalTokens: null,
+        isCurrentWeek: index === 3,
+        isCompleted: false,
+      })),
+    }));
+  }, [rawWeeklyTrend]);
+  const chartData = useMemo(() => {
+    return WEEKDAYS.map((day) => {
+      const entry = { day } as Record<string, number | null> & { day: string };
+      weeklyTrendLines.forEach((week, index) => {
+        const dayValue = week.days.find((d) => d.day === day)?.totalCost ?? null;
+        entry[`week${index}`] = dayValue;
+      });
+      return entry;
+    });
+  }, [weeklyTrendLines]);
 
   return (
     <div className="dashboard-shell">
@@ -238,28 +264,28 @@ export default function DashboardShell({}: DashboardShellProps) {
             <p className="section-label">Weekly Trend (Sun → Sat)</p>
             <span className="subtle">Current week shows completed days only</span>
           </div>
-          <div className="line-chart-rows">
-            {weeklyTrend.map((week) => (
-              <div className={`line-row${week.isCurrentWeek ? " current" : ""}`} key={week.label}>
-                <div className="row-label">
-                  {week.isCurrentWeek ? "Current week" : week.label}
-                  {week.isCurrentWeek && <span className="current-week">Current</span>}
-                </div>
-                <div className="row-points">
-                  {week.days.map((day) => (
-                    <div
-                      key={`${week.label}-${day.day}`}
-                      className={`row-point${day.totalCost === null ? " empty" : ""}`}
-                    >
-                      <span className="row-day">{day.day}</span>
-                      <span className="row-value">
-                        {day.totalCost !== null ? currencyFormatter.format(day.totalCost) : "—"}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
+          <div className="line-chart-wrapper">
+            <ResponsiveContainer width="100%" height={220}>
+              <LineChart data={chartData}>
+                <XAxis dataKey="day" stroke="var(--muted)" tick={{ fontSize: 10 }} />
+                <YAxis stroke="var(--muted)" tickFormatter={(value) => (typeof value === "number" ? currencyFormatter.format(value) : "—")} />
+                <Tooltip formatter={(value) => (typeof value === "number" ? currencyFormatter.format(value) : "—")} />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                {weeklyTrendLines.map((week, index) => (
+                  <Line
+                    key={week.label}
+                    dataKey={`week${index}`}
+                    name={week.isCurrentWeek ? "Current week" : week.label}
+                    stroke={lineColors[index % lineColors.length]}
+                    strokeDasharray={week.isCurrentWeek ? "5 5" : undefined}
+                    dot={{ r: 3 }}
+                    activeDot={{ r: 5 }}
+                    connectNulls={!week.isCurrentWeek}
+                    strokeWidth={2}
+                  />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </section>
