@@ -7,7 +7,7 @@
 - Screen attachments: auto-run OCR; if text-only pipeline works, keep on cheap model; escalate to `gpt-5.2` if necessary.
 
 ## Dashboard + reports
-- Dashboard located at `/workspace/dashboard`; Next.js served via systemd user service on `0.0.0.0:3010` using `npm run start`.
+- Dashboard located at `/workspace/sanctum-core`; Next.js served via systemd user service on `0.0.0.0:3010` using `npm run start`.
 - Spend pipeline:
   - `scripts/spend_report.py` now supports `--json-out` + `--history-out` (JSONL). History stored at `~/.openclaw/state/spend-history.jsonl` for trend analysis.
   - Nightly 3am cron jobs update dashboard snapshot + history and deliver markdown to Telegram + Discord.

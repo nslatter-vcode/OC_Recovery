@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/maya/.openclaw/workspace/dashboard
+WorkingDirectory=/home/maya/.openclaw/workspace/sanctum-core
 ExecStart=/home/maya/.openclaw/workspace/scripts/dashboard_prod_start.sh
 Restart=on-failure
 RestartSec=3

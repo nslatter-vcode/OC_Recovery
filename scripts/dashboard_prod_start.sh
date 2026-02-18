@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /home/maya/.openclaw/workspace/dashboard
+cd /home/maya/.openclaw/workspace/sanctum-core
 
 export NODE_ENV=production
 export HOSTNAME=0.0.0.0

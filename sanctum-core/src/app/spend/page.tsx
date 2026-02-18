@@ -56,7 +56,7 @@ export default async function SpendPage() {
           No snapshot found yet. Generate one with: <code>scripts/spend_report_to_dashboard.sh</code>
         </p>
         <p className="subtle">
-          Expected file: <code>dashboard/public/spend-report-latest.json</code>
+          Expected file: <code>sanctum-core/public/spend-report-latest.json</code>
         </p>
       </main>
     );
