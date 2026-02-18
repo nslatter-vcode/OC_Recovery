@@ -217,27 +217,6 @@ export default function DashboardShell({}: DashboardShellProps) {
         </Link>
       </div>
 
-      <section className="summary usage-summary">
-        <div>
-          <p className="section-label">SUMMARY</p>
-          <p>
-            Yesterday cost: <strong>{currencyFormatter.format(usage?.yesterdayCost ?? 0)}</strong>
-          </p>
-          <p>
-            Today cost: <strong>{currencyFormatter.format(usage?.todayCost ?? 0)}</strong>
-          </p>
-          <p className="subtle">Tokens today: {usage?.todayTokens?.toLocaleString() ?? 0}</p>
-        </div>
-        <div className="plan-note">
-          <p>Ritual Command Surface</p>
-          {weeklyTrend.length > 0 && (
-            <p className="subtle">
-              7-day trend: {currencyFormatter.format(latestTrendCost)}
-            </p>
-          )}
-        </div>
-      </section>
-
       <section className="usage-detail">
         <div className="day-summary-card">
           <p className="day-summary-label">CST Day Summary</p>

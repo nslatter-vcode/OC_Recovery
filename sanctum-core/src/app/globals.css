@@ -265,20 +265,6 @@ code {
   background: rgba(12, 12, 18, 0.6);
 }
 
-.summary {
-  margin-top: 26px;
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  background: linear-gradient(180deg, rgba(24, 24, 32, 0.9), rgba(18, 18, 28, 0.95));
-}
-
-.usage-summary {
-  background: linear-gradient(180deg, rgba(26, 26, 40, 0.9), rgba(22, 22, 32, 0.95));
-}
 
 .section-label {
   text-transform: uppercase;
