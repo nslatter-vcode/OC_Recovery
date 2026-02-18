@@ -1,0 +1,10 @@
+[Unit]
+Description=Hourly Sanctum usage ingest timer
+
+[Timer]
+OnCalendar=hourly
+Persistent=true
+Unit=openclaw-sanctum-ingest.service
+
+[Install]
+WantedBy=timers.target

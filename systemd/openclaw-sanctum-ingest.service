@@ -1,0 +1,8 @@
+[Unit]
+Description=OpenClaw Sanctum Usage Ingest
+After=openclaw-sanctum.service
+
+[Service]
+Type=oneshot
+Environment="SANCTUM_API_BASE=http://localhost:3010"
+ExecStart=/usr/bin/curl -s -X POST http://localhost:3010/api/usage/ingest

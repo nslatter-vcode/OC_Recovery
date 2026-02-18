@@ -53,4 +53,6 @@ model UsageEvent {
   totalTokens   Int
   estimatedCost Float
   createdAt     DateTime @default(now())
+
+  @@unique([tsCst])
 }
