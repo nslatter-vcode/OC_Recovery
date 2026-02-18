@@ -173,9 +173,11 @@ code {
 }
 
 .command-board {
-  margin-top: 28px;
+  margin: 28px auto 0;
   display: flex;
   justify-content: center;
+  width: min(1100px, 100%);
+  padding: 0 18px;
 }
 
 .task-link-wrap {
@@ -273,11 +275,12 @@ code {
 }
 
 .usage-detail {
-  margin-top: 18px;
+  margin: 18px auto 0;
   padding: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   background: var(--panel2);
+  width: min(1100px, 100%);
 }
 
 .day-summary-card {
