@@ -37,8 +37,10 @@ export async function ingestOpenClawSpend({ hours = 24 } = {}) {
   const files = await readSessionPaths();
   const hourly = new Map();
   const sessionModel = new Map();
+  let scanned = 0;
 
   for (const file of files) {
+    scanned += 1;
     const sessionId = path.basename(file).replace(".jsonl", "");
     const stream = fs.createReadStream(file, { encoding: "utf8" });
     const rl = readline.createInterface({ input: stream, crlfDelay: Infinity });
@@ -88,6 +90,7 @@ export async function ingestOpenClawSpend({ hours = 24 } = {}) {
 
   results.sort((a, b) => a.hour.toMillis() - b.hour.toMillis());
 
+  let newestHour = null;
   for (const row of results) {
     await prisma.usageEvent.upsert({
       where: { tsCst: row.hour.toJSDate() },
@@ -107,7 +110,12 @@ export async function ingestOpenClawSpend({ hours = 24 } = {}) {
         estimatedCost: row.cost,
       },
     });
+    newestHour = row.hour;
   }
 
-  return results.length;
+  return {
+    scannedFiles: scanned,
+    hoursUpserted: results.length,
+    newestHour: newestHour?.toISO() ?? null,
+  };
 }
