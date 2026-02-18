@@ -244,48 +244,58 @@ export default function DashboardShell({}: DashboardShellProps) {
       </div>
 
       <section className="usage-detail">
-        <div className="day-summary-card">
-          <p className="day-summary-label">CST Day Summary</p>
-          <p className="day-summary-date">{dayLabel}</p>
-          <p className="day-summary-range">{dayRangeText}</p>
-          <div className="day-summary-stats">
-            <div>
-              <p>Total tokens</p>
-              <strong>{tokensToday.toLocaleString()}</strong>
+        <div className="usage-grid">
+          <div className="usage-left">
+            <div className="day-summary-card">
+              <p className="day-summary-label">CST Day Summary</p>
+              <p className="day-summary-date">{dayLabel}</p>
+              <p className="day-summary-range">{dayRangeText}</p>
+              <div className="day-summary-stats">
+                <div>
+                  <p>Total tokens</p>
+                  <strong>{tokensToday.toLocaleString()}</strong>
+                </div>
+                <div>
+                  <p>Total cost</p>
+                  <strong>{currencyFormatter.format(costToday)}</strong>
+                </div>
+              </div>
             </div>
-            <div>
-              <p>Total cost</p>
-              <strong>{currencyFormatter.format(costToday)}</strong>
+            <div className="line-chart">
+              <div className="line-chart-header">
+                <p className="section-label">Weekly Trend (Sun → Sat)</p>
+                <span className="subtle">Current week shows completed days only</span>
+              </div>
+              <div className="line-chart-wrapper">
+                <ResponsiveContainer width="100%" height={220}>
+                  <LineChart data={chartData}>
+                    <XAxis dataKey="day" stroke="var(--muted)" tick={{ fontSize: 10 }} />
+                    <YAxis stroke="var(--muted)" tickFormatter={(value) => (typeof value === "number" ? currencyFormatter.format(value) : "—")} />
+                    <Tooltip formatter={(value) => (typeof value === "number" ? currencyFormatter.format(value) : "—")} />
+                    <Legend wrapperStyle={{ fontSize: 12 }} />
+                    {weeklyTrendLines.map((week, index) => (
+                      <Line
+                        key={week.label}
+                        dataKey={`week${index}`}
+                        name={week.isCurrentWeek ? "Current week" : week.label}
+                        stroke={lineColors[index % lineColors.length]}
+                        strokeDasharray={week.isCurrentWeek ? "5 5" : undefined}
+                        dot={{ r: 3 }}
+                        activeDot={{ r: 5 }}
+                        connectNulls={!week.isCurrentWeek}
+                        strokeWidth={2}
+                      />
+                    ))}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="line-chart">
-          <div className="line-chart-header">
-            <p className="section-label">Weekly Trend (Sun → Sat)</p>
-            <span className="subtle">Current week shows completed days only</span>
-          </div>
-          <div className="line-chart-wrapper">
-            <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={chartData}>
-                <XAxis dataKey="day" stroke="var(--muted)" tick={{ fontSize: 10 }} />
-                <YAxis stroke="var(--muted)" tickFormatter={(value) => (typeof value === "number" ? currencyFormatter.format(value) : "—")} />
-                <Tooltip formatter={(value) => (typeof value === "number" ? currencyFormatter.format(value) : "—")} />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                {weeklyTrendLines.map((week, index) => (
-                  <Line
-                    key={week.label}
-                    dataKey={`week${index}`}
-                    name={week.isCurrentWeek ? "Current week" : week.label}
-                    stroke={lineColors[index % lineColors.length]}
-                    strokeDasharray={week.isCurrentWeek ? "5 5" : undefined}
-                    dot={{ r: 3 }}
-                    activeDot={{ r: 5 }}
-                    connectNulls={!week.isCurrentWeek}
-                    strokeWidth={2}
-                  />
-                ))}
-              </LineChart>
-            </ResponsiveContainer>
+          <div className="usage-right">
+            <div className="placeholder-panel">
+              <p className="placeholder-title">Financial Control Surface</p>
+              <p className="placeholder-body">Monitor spend in real time. Metrics pipeline still warming up.</p>
+            </div>
           </div>
         </div>
       </section>

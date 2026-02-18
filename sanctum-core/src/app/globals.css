@@ -290,6 +290,45 @@ code {
   background: var(--panel2);
 }
 
+.usage-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.usage-left,
+.usage-right {
+  flex: 1 1 320px;
+}
+
+.placeholder-panel {
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.placeholder-title {
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.7rem;
+}
+
+.placeholder-body {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+@media (min-width: 1200px) {
+  .usage-left,
+  .usage-right {
+    flex: 1 1 50%;
+  }
+}
+
 .day-summary-card {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
