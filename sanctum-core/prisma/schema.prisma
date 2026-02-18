@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// Task enums (stored as strings):
+// domain: REAL_ESTATE | SANCTUM | FREEDOM | PERSONAL | OTHER
+// status: OPEN | DOING | DONE
+// priority: P1 | P2 | P3
+// revenueImpact: HIGH | MEDIUM | LOW
+// blockedBy: SELF | EXTERNAL
+// type: ONE_OFF | RECURRING
+// feedback: UP | DOWN | FIRE
+
+model Task {
+  id                 String  @id @default(cuid())
+  title              String
+  domain             String
+  status             String  @default("OPEN")
+  priority           String  @default("P3")
+  revenueImpact      String  @default("LOW")
+  blocked            Boolean @default(false)
+  blockedBy          String?
+  blockReason        String?
+  type               String  @default("ONE_OFF")
+  repeatIntervalDays Int?
+  dueAt              DateTime?
+  tags               String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  closedAt           DateTime?
+}
+
+model DailySignal {
+  id             String  @id @default(cuid())
+  utcDate        String  @unique
+  openingLine    String
+  reflectionLine String
+  feedback       String?
+  createdAt      DateTime @default(now())
+}
+
+model UsageEvent {
+  id            String   @id @default(cuid())
+  tsCst         DateTime
+  model         String
+  inputTokens   Int
+  outputTokens  Int
+  totalTokens   Int
+  estimatedCost Float
+  createdAt     DateTime @default(now())
+}

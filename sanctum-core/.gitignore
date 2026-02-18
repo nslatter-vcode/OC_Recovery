@@ -41,6 +41,10 @@ public/coach-signal-history.jsonl
 public/spend-report-latest.json
 public/yggdrasil-home.json
 
+# Prisma
+prisma/dev.db
+prisma/dev.db-journal
+
 # vercel
 .vercel
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AddTaskButton from "@/components/AddTaskButton";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -64,15 +65,8 @@ export default function RootLayout({
                   </div>
                 </div>
               ))}
-              <div className="nav-item">
-                <Link className="nav-link" href="/profile">
-                  Profile
-                </Link>
-              </div>
-              <div className="nav-item">
-                <Link className="nav-link" href="/about">
-                  About
-                </Link>
+              <div className="nav-actions">
+                <AddTaskButton />
               </div>
             </nav>
           </div>
